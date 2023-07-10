@@ -10,7 +10,7 @@ pub const String = struct {
     var allocater: std.heap.ArenaAllocator = undefined;
     var a: std.mem.Allocator = undefined;
 
-    fn init() Self {
+    pub fn init() Self {
         allocater = std.heap.ArenaAllocator.init(std.heap.page_allocator);
         a = allocater.allocator();
 
@@ -20,7 +20,7 @@ pub const String = struct {
         };
     }
 
-    fn initString(str: [:0]const u8) Self {
+    pub fn initString(str: [:0]const u8) Self {
         allocater = std.heap.ArenaAllocator.init(std.heap.page_allocator);
         a = allocater.allocator();
 
@@ -37,7 +37,7 @@ pub const String = struct {
         };
     }
 
-    fn push(self: *Self, str: [:0]const u8) !void {
+    pub fn push(self: *Self, str: [:0]const u8) !void {
         if (self.buffer) |_| {
             self.buffer = try a.realloc(self.buffer.?, self.size + str.len);
         } else {
@@ -52,15 +52,15 @@ pub const String = struct {
         self.size += str.len;
     }
 
-    fn add(self: *Self, str: [:0]const u8) void {
+    pub fn add(self: *Self, str: [:0]const u8) void {
         self.push(str) catch unreachable;
     }
 
-    fn get(self: Self) []u8 {
+    pub fn get(self: Self) []u8 {
         return self.buffer orelse "";
     }
 
-    fn clear(self: *Self) void {
+    pub fn clear(self: *Self) void {
         if (self.buffer) |_| {
             self.buffer = a.realloc(self.buffer.?, 0) catch unreachable;
         }
@@ -68,15 +68,15 @@ pub const String = struct {
         self.size = 0;
     }
 
-    fn equ(self: Self, str: Self) bool {
+    pub fn equ(self: Self, str: Self) bool {
         return std.mem.eql(u8, self.get(), str.get());
     }
 
-    fn equString(self: Self, str: [:0]const u8) bool {
+    pub fn equString(self: Self, str: [:0]const u8) bool {
         return std.mem.eql(u8, self.get(), str);
     }
 
-    fn len(self: Self) usize {
+    pub fn len(self: Self) usize {
         return self.size;
     }
 
