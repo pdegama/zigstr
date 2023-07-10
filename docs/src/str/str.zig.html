@@ -123,7 +123,7 @@
 <span class="line" id="L10">    <span class="tok-kw">var</span> allocater: std.heap.ArenaAllocator = <span class="tok-null">undefined</span>;</span>
 <span class="line" id="L11">    <span class="tok-kw">var</span> a: std.mem.Allocator = <span class="tok-null">undefined</span>;</span>
 <span class="line" id="L12"></span>
-<span class="line" id="L13">    <span class="tok-kw">fn</span> <span class="tok-fn">init</span>() Self {</span>
+<span class="line" id="L13">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">init</span>() Self {</span>
 <span class="line" id="L14">        allocater = std.heap.ArenaAllocator.init(std.heap.page_allocator);</span>
 <span class="line" id="L15">        a = allocater.allocator();</span>
 <span class="line" id="L16"></span>
@@ -133,7 +133,7 @@
 <span class="line" id="L20">        };</span>
 <span class="line" id="L21">    }</span>
 <span class="line" id="L22"></span>
-<span class="line" id="L23">    <span class="tok-kw">fn</span> <span class="tok-fn">initString</span>(str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) Self {</span>
+<span class="line" id="L23">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">initString</span>(str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) Self {</span>
 <span class="line" id="L24">        allocater = std.heap.ArenaAllocator.init(std.heap.page_allocator);</span>
 <span class="line" id="L25">        a = allocater.allocator();</span>
 <span class="line" id="L26"></span>
@@ -150,7 +150,7 @@
 <span class="line" id="L37">        };</span>
 <span class="line" id="L38">    }</span>
 <span class="line" id="L39"></span>
-<span class="line" id="L40">    <span class="tok-kw">fn</span> <span class="tok-fn">push</span>(self: *Self, str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) !<span class="tok-type">void</span> {</span>
+<span class="line" id="L40">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">push</span>(self: *Self, str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) !<span class="tok-type">void</span> {</span>
 <span class="line" id="L41">        <span class="tok-kw">if</span> (self.buffer) |_| {</span>
 <span class="line" id="L42">            self.buffer = <span class="tok-kw">try</span> a.realloc(self.buffer.?, self.size + str.len);</span>
 <span class="line" id="L43">        } <span class="tok-kw">else</span> {</span>
@@ -165,15 +165,15 @@
 <span class="line" id="L52">        self.size += str.len;</span>
 <span class="line" id="L53">    }</span>
 <span class="line" id="L54"></span>
-<span class="line" id="L55">    <span class="tok-kw">fn</span> <span class="tok-fn">add</span>(self: *Self, str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) <span class="tok-type">void</span> {</span>
+<span class="line" id="L55">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">add</span>(self: *Self, str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) <span class="tok-type">void</span> {</span>
 <span class="line" id="L56">        self.push(str) <span class="tok-kw">catch</span> <span class="tok-kw">unreachable</span>;</span>
 <span class="line" id="L57">    }</span>
 <span class="line" id="L58"></span>
-<span class="line" id="L59">    <span class="tok-kw">fn</span> <span class="tok-fn">get</span>(self: Self) []<span class="tok-type">u8</span> {</span>
+<span class="line" id="L59">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">get</span>(self: Self) []<span class="tok-type">u8</span> {</span>
 <span class="line" id="L60">        <span class="tok-kw">return</span> self.buffer <span class="tok-kw">orelse</span> <span class="tok-str">&quot;&quot;</span>;</span>
 <span class="line" id="L61">    }</span>
 <span class="line" id="L62"></span>
-<span class="line" id="L63">    <span class="tok-kw">fn</span> <span class="tok-fn">clear</span>(self: *Self) <span class="tok-type">void</span> {</span>
+<span class="line" id="L63">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">clear</span>(self: *Self) <span class="tok-type">void</span> {</span>
 <span class="line" id="L64">        <span class="tok-kw">if</span> (self.buffer) |_| {</span>
 <span class="line" id="L65">            self.buffer = a.realloc(self.buffer.?, <span class="tok-number">0</span>) <span class="tok-kw">catch</span> <span class="tok-kw">unreachable</span>;</span>
 <span class="line" id="L66">        }</span>
@@ -181,15 +181,15 @@
 <span class="line" id="L68">        self.size = <span class="tok-number">0</span>;</span>
 <span class="line" id="L69">    }</span>
 <span class="line" id="L70"></span>
-<span class="line" id="L71">    <span class="tok-kw">fn</span> <span class="tok-fn">equ</span>(self: Self, str: Self) <span class="tok-type">bool</span> {</span>
+<span class="line" id="L71">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">equ</span>(self: Self, str: Self) <span class="tok-type">bool</span> {</span>
 <span class="line" id="L72">        <span class="tok-kw">return</span> std.mem.eql(<span class="tok-type">u8</span>, self.get(), str.get());</span>
 <span class="line" id="L73">    }</span>
 <span class="line" id="L74"></span>
-<span class="line" id="L75">    <span class="tok-kw">fn</span> <span class="tok-fn">equString</span>(self: Self, str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) <span class="tok-type">bool</span> {</span>
+<span class="line" id="L75">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">equString</span>(self: Self, str: [:<span class="tok-number">0</span>]<span class="tok-kw">const</span> <span class="tok-type">u8</span>) <span class="tok-type">bool</span> {</span>
 <span class="line" id="L76">        <span class="tok-kw">return</span> std.mem.eql(<span class="tok-type">u8</span>, self.get(), str);</span>
 <span class="line" id="L77">    }</span>
 <span class="line" id="L78"></span>
-<span class="line" id="L79">    <span class="tok-kw">fn</span> <span class="tok-fn">len</span>(self: Self) <span class="tok-type">usize</span> {</span>
+<span class="line" id="L79">    <span class="tok-kw">pub</span> <span class="tok-kw">fn</span> <span class="tok-fn">len</span>(self: Self) <span class="tok-type">usize</span> {</span>
 <span class="line" id="L80">        <span class="tok-kw">return</span> self.size;</span>
 <span class="line" id="L81">    }</span>
 <span class="line" id="L82"></span>
