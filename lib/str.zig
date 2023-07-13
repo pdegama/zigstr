@@ -52,6 +52,18 @@ pub const String = struct {
         self.size += str.len;
     }
 
+    pub fn pushChar(self: *String, char: u8) !void {
+        if (self.buffer) |_| {
+            self.buffer = try a.realloc(self.buffer.?, self.size + 1);
+        } else {
+            self.buffer = try a.alloc(u8, 1);
+        }
+
+        self.buffer.?[self.size] = char;
+
+        self.size += 1;
+    }
+
     pub fn add(self: *Self, str: [:0]const u8) void {
         self.push(str) catch unreachable;
     }
