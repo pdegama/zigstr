@@ -68,6 +68,10 @@ pub const String = struct {
         self.push(str) catch unreachable;
     }
 
+    pub fn addChar(self: *Self, char: u8) void {
+        self.pushChar(char) catch unreachable;
+    }
+
     pub fn get(self: Self) []u8 {
         return self.buffer orelse "";
     }
